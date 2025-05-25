@@ -1,3 +1,6 @@
+import { MovieModel } from '../Model/movie.js'
+import { validateMovie, validatePartialMovie } from '../schemas/movies.js'
+
 export class MovieController {
     static async getAll(req, res) {
         const { genre } = req.query
@@ -7,7 +10,7 @@ export class MovieController {
 
     static async getById(req, res) {
         const { id } = req.params
-        const movie = find(movie => movie.id === id)
+        const movie = await MovieModel.getById({ id })
         if (movie) return res.json(movie)
         res.status(404).json({ message: 'Movie not found' })
     }
@@ -46,8 +49,8 @@ export class MovieController {
 
         const { id } = req.params
 
-        const updateMovie = await MovieModel.update({ id, input: result.data })
+        const updatedMovie = await MovieModel.update({ id, input: result.data })
 
-        return res.json(updateMovie)
+        return res.json(updatedMovie)
     }
 }
